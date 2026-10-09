@@ -2,6 +2,7 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
+#include <cstdlib>
 using namespace std;
 
 // ---------------------------------------------------------------
@@ -108,11 +109,19 @@ StockFarmacia invFarm[MAX_INV_FARM];   int numInvFarm = 0;
 // ---------------------------------------------------------------
 // Lectura de datos con validacion
 // ---------------------------------------------------------------
+// Quita espacios y el '\r' que deja Windows al final de la linea
+string limpiar(string s) {
+    while (!s.empty() && (s.back() == '\r' || s.back() == ' ')) s.pop_back();
+    while (!s.empty() && s[0] == ' ') s.erase(0, 1);
+    return s;
+}
+
 string leerTexto(string mensaje) {
     string s;
     do {
         cout << mensaje;
-        getline(cin, s);
+        if (!getline(cin, s)) exit(0);   // se cerro la entrada
+        s = limpiar(s);
     } while (s.empty());
     return s;
 }
